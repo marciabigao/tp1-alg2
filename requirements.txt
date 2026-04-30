@@ -1,0 +1,2 @@
+dash>=3.0.0
+dash-leaflet>=1.1.0
