@@ -179,3 +179,91 @@ app.layout = html.Div(
     State("address-input", "value"),
     State("diagonal-input", "value"),
 )
+
+def refresh_map(
+    search_clicks,
+    reset_clicks,
+    address_value,
+    diagonal_value,
+):
+    if not ctx.triggered_id:
+        return (
+            default_markers(),
+            [],
+            [],
+            "",
+        )
+    action = ctx.triggered_id
+    if action == "reset-btn":
+        return (
+            default_markers(),
+            [],
+            [],
+            "Filtros resetados.",
+        )
+
+    if not address_value or not address_value.strip():
+        return (
+            default_markers(),
+            [],
+            [],
+            "Digite um endereço válido.",
+        )
+
+    if diagonal_value is None:
+        diagonal_value = 5
+
+    coordinates = geocode_user_address(address_value.strip())
+    if (
+        coordinates is None
+        or coordinates[0] is None
+        or coordinates[1] is None
+    ):
+        return (
+            default_markers(),
+            [],
+            [],
+            "Endereço não encontrado.",
+        )
+
+    latitude, longitude = coordinates
+    found_places, area_limits = search_by_diagonal(
+        SEARCH_TREE,
+        latitude,
+        longitude,
+        float(diagonal_value),
+    )
+    marker_group = [
+        build_marker(
+            latitude,
+            longitude,
+            "Endereço buscado",
+            address_value,
+        )
+    ]
+
+    for item in found_places:
+        marker_group.append(
+            build_marker(
+                item["lat"],
+                item["lon"],
+                item["name"],
+                f'{item["address"]} | {item["distance_km"]} km',
+            )
+        )
+    highlighted_area = dl.Rectangle(
+        bounds=area_limits,
+        pathOptions={
+            "color": "red",
+            "weight": 3,
+        },
+    )
+    return (
+        marker_group,
+        [highlighted_area],
+        found_places,
+        f"{len(found_places)} bares encontrados.",
+    )
+
+if __name__ == "__main__":
+    app.run(debug=True)
