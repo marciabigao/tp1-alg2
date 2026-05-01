@@ -81,3 +81,58 @@ def compute_rectangle(
         center_longitude - lon_offset,
         center_longitude + lon_offset,
     )
+
+def search_by_diagonal(
+    kd_tree: KDTree,
+    center_latitude: float,
+    center_longitude: float,
+    diagonal_size_km: float,
+):
+    (
+        lower_lat,
+        upper_lat,
+        lower_lon,
+        upper_lon,
+    ) = compute_rectangle(
+        center_latitude,
+        center_longitude,
+        diagonal_size_km,
+    )
+    candidates = range_search(
+        kd_tree,
+        lower_lat,
+        upper_lat,
+        lower_lon,
+        upper_lon,
+    )
+    results = []
+
+    for point in candidates:
+        results.append(
+            {
+                "name": point.name,
+                "address": point.address,
+                "lat": point.lat,
+                "lon": point.lon,
+                "distance_km": round(
+                    calculate_distance(
+                        center_latitude,
+                        center_longitude,
+                        point.lat,
+                        point.lon,
+                    ),
+                    2,
+                ),
+            }
+        )
+
+    results.sort(
+        key=lambda item: item["distance_km"]
+    )
+
+    area_bounds = [
+        [lower_lat, lower_lon],
+        [upper_lat, upper_lon],
+    ]
+
+    return results, area_bounds
