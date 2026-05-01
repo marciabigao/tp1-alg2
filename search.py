@@ -27,3 +27,35 @@ def calculate_distance(
         math.sqrt(1 - a),
     )
     return EARTH_RADIUS * c
+
+def range_search(
+    kd_tree: KDTree,
+    lower_lat: float,
+    upper_lat: float,
+    lower_lon: float,
+    upper_lon: float,
+) -> List[Point]:
+    collected = []
+
+    def traverse(node: KDNode | None):
+        if node is None:
+            return
+        current_point = node.point
+        if (
+            lower_lat <= current_point.lat <= upper_lat
+            and lower_lon <= current_point.lon <= upper_lon
+        ):
+            collected.append(current_point)
+        if node.axis == 0:
+            if lower_lat <= current_point.lat:
+                traverse(node.left)
+            if current_point.lat <= upper_lat:
+                traverse(node.right)
+        else:
+            if lower_lon <= current_point.lon:
+                traverse(node.left)
+            if current_point.lon <= upper_lon:
+                traverse(node.right)
+
+    traverse(kd_tree.root)
+    return collected
