@@ -1,27 +1,30 @@
 # Como executar o projeto
 
+## Ambiente
+
+A execução deve ser feita em um ambiente Linux com Python 3 instalado.
+
 ## 1. Instalar dependências
 
 No terminal, dentro da pasta do projeto:
 
 ```bash
-pip install dash dash-leaflet
+pip3 install dash dash-leaflet
 ```
 
-## 2. Gerar arquivo com coordenadas (se necessário)
+## 2. Gerar arquivo com coordenadas
 
-Se o arquivo `data/butecos_geocoded.csv` não existir, execute:
+Se o arquivo data/butecos_geocoded.csv não existir, execute:
 
 ```bash
-python geocode.py
+python3 geocode.py
 ```
 
 ## 3. Executar a aplicação
 
 ```bash
-python app.py
+python3 app.py
 ```
-
 
 ## 4. Acessar no navegador
 

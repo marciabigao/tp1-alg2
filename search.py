@@ -4,6 +4,7 @@ from kd_tree import KDTree, KDNode, Point
 
 EARTH_RADIUS = 6371.0
 
+#calcula a distância entre dois pontos geográficos usando a fórmula de haversine.
 def calculate_distance(
     lat_a: float,
     lon_a: float,
@@ -28,6 +29,7 @@ def calculate_distance(
     )
     return EARTH_RADIUS * c
 
+#realiza uma busca ortogonal na kd-tree retornando todos os pontos dentro de um retângulo definido
 def range_search(
     kd_tree: KDTree,
     lower_lat: float,
@@ -60,6 +62,7 @@ def range_search(
     traverse(kd_tree.root)
     return collected
 
+#calcula os limites de um retângulo centrado em um ponto a partir do tamanho da diagonal em quilômetros
 def compute_rectangle(
     center_latitude: float,
     center_longitude: float,
@@ -82,6 +85,8 @@ def compute_rectangle(
         center_longitude + lon_offset,
     )
 
+#executa a busca por bares dentro da região definida pela diagonal, ordenando os resultados por distância
+#e retornando também os limites da área para visualização no mapa
 def search_by_diagonal(
     kd_tree: KDTree,
     center_latitude: float,

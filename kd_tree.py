@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
+#classe que representa um ponto geográfico com nome, endereço e coordenadas
 @dataclass
 class Point:
     name: str
@@ -8,6 +9,7 @@ class Point:
     lat: float
     lon: float
 
+#nó da kd-tree que armazena um ponto, o eixo de divisão e referências para filhos esquerdo e direito
 @dataclass
 class KDNode:
     point: Point
@@ -15,7 +17,9 @@ class KDNode:
     left: Optional["KDNode"] = None
     right: Optional["KDNode"] = None
 
+#estrutura kd-tree construída a partir de uma lista de pontos para permitir buscas espaciais eficientes
 class KDTree:
+    #inicializa a kd-tree filtrando pontos inválidos e construindo a árvore recursivamente
     def __init__(self, points: List[Point]):
         valid_points = [
             item
@@ -28,7 +32,7 @@ class KDTree:
             valid_points,
             0,
         )
-
+    #constrói recursivamente a kd-tree escolhendo a mediana dos pontos com base no eixo atual
     def _create_tree(
         self,
         values: List[Point],
@@ -62,6 +66,7 @@ class KDTree:
             right=right_branch,
         )
 
+    #retorna o número total de nós presentes na kd-tree.
     def __len__(self):
         def node_count(current_node):
             if current_node is None:

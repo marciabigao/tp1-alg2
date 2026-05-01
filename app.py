@@ -9,6 +9,7 @@ from geocode import geocode_user_address
 CSV_PATH = "data/butecos_geocoded.csv"
 MAP_CENTER = (-19.9167, -43.9345)
 
+#lê o arquivo csv com os bares geocodificados e retorna uma lista de objetos point válidos
 def read_locations():
     locations = []
 
@@ -43,6 +44,7 @@ def read_locations():
 LOCATIONS = read_locations()
 SEARCH_TREE = KDTree(LOCATIONS)
 
+#cria um marcador no mapa para uma coordenada específica, com título e descrição exibidos em um popup
 def build_marker(latitude, longitude, heading, details=""):
     popup_items = [html.B(heading)]
 
@@ -57,6 +59,7 @@ def build_marker(latitude, longitude, heading, details=""):
         children=[dl.Popup(popup_items)],
     )
 
+#gera a lista de marcadores padrão do mapa com todos os bares carregados
 def default_markers():
     markers_list = []
 
@@ -180,6 +183,7 @@ app.layout = html.Div(
     State("diagonal-input", "value"),
 )
 
+# Callback principal da aplicação: processa eventos de busca e reset, atualiza o mapa, a área destacada, a tabela de resultados e a mensagem de status
 def refresh_map(
     search_clicks,
     reset_clicks,

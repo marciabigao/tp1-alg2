@@ -9,6 +9,7 @@ SOURCE_FILE = "data/butecos_bh.csv"
 RESULT_FILE = "data/butecos_geocoded.csv"
 ADDRESS_CACHE_FILE = "data/address_cache.json"
 
+#lê o arquivo de cache de endereços geocodificados e retorna um dicionário com os resultados salvos
 def read_cache():
     try:
         with open(
@@ -23,6 +24,7 @@ def read_cache():
     ):
         return {}
 
+#salva no arquivo de cache os endereços e suas coordenadas já consultadas
 def write_cache(cache_data):
     with open(
         ADDRESS_CACHE_FILE,
@@ -38,6 +40,8 @@ def write_cache(cache_data):
 
 ADDRESS_CACHE = read_cache()
 
+#consulta a API de geocodificação para obter latitude e longitude de um endereço,
+#utilizando cache para evitar requisições repetidas
 def fetch_coordinates(address: str):
     if address in ADDRESS_CACHE:
         saved_coords = ADDRESS_CACHE[address]
@@ -93,12 +97,15 @@ def fetch_coordinates(address: str):
     ):
         return None, None
 
+#monta uma consulta completa adicionando localização padrão
+#e delega a busca de coordenadas para a função de geocodificação
 def geocode_user_address(address: str):
     full_query = (
         f"{address}, Belo Horizonte, Minas Gerais, Brasil"
     )
     return fetch_coordinates(full_query)
 
+#lê o csv original de bares, geocodifica cada endereço e gera um novo arquivo csv com coordenadas
 def generate_geocoded_csv():
     records = []
 
