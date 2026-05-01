@@ -42,3 +42,33 @@ def read_locations():
 
 LOCATIONS = read_locations()
 SEARCH_TREE = KDTree(LOCATIONS)
+
+def build_marker(latitude, longitude, heading, details=""):
+    popup_items = [html.B(heading)]
+
+    if details:
+        popup_items += [
+            html.Br(),
+            details,
+        ]
+
+    return dl.Marker(
+        position=[latitude, longitude],
+        children=[dl.Popup(popup_items)],
+    )
+
+def default_markers():
+    markers_list = []
+
+    for place in LOCATIONS:
+        markers_list.append(
+            build_marker(
+                place.lat,
+                place.lon,
+                place.name,
+                place.address,
+            )
+        )
+    return markers_list
+
+app = Dash(__name__)
