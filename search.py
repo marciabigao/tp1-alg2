@@ -59,3 +59,25 @@ def range_search(
 
     traverse(kd_tree.root)
     return collected
+
+def compute_rectangle(
+    center_latitude: float,
+    center_longitude: float,
+    diagonal_size_km: float,
+):
+    half_length = diagonal_size_km / (2 * math.sqrt(2))
+    lat_offset = half_length / 111.0
+    cosine_lat = math.cos(
+        math.radians(center_latitude)
+    )
+
+    if abs(cosine_lat) < 1e-8:
+        lon_offset = 0
+    else:
+        lon_offset = half_length / (111.0 * cosine_lat)
+    return (
+        center_latitude - lat_offset,
+        center_latitude + lat_offset,
+        center_longitude - lon_offset,
+        center_longitude + lon_offset,
+    )
