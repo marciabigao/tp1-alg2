@@ -9,7 +9,7 @@ A execução deve ser feita em um ambiente Linux com Python 3 instalado.
 No terminal, dentro da pasta do projeto:
 
 ```bash
-pip3 install dash dash-leaflet
+pip3 install -r requirements.txt
 ```
 
 ## 2. Gerar arquivo com coordenadas
