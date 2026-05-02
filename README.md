@@ -28,7 +28,7 @@ python3 app.py
 
 ## 4. Acessar no navegador
 
-Abra:
+Abra o endereço que aparecer no terminal, por exemplo:
 
 ```
 http://127.0.0.1:8050/
